@@ -4,6 +4,16 @@ A small terminal based speedreading tool, inspired by [pasky's speedread project
 
 The original project was written in Perl. I'm (trying) to implement it in Golang using [Bubbletea](https://github.com/charmbracelet/bubbletea).
 
+## Installation
+**Install script:**
+```
+curl "https://raw.githubusercontent.com/jonh-a/speedreader/main/install.sh" | bash
+```
+
+**Building from source:**
+```
+go build
+```
 
 ## Command Line Usage
 
