@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os/user"
@@ -36,8 +35,6 @@ func readConfig() Config {
 	if err != nil {
 		return Config{Wpm: 200}
 	}
-
-	fmt.Println("a", config)
 
 	return config
 }

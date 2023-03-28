@@ -6,7 +6,6 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/nsf/termbox-go"
 )
 
 var wpm = 200
@@ -47,12 +46,6 @@ func main() {
 	}
 
 	model := createModel(input, source, paused)
-
-	err := termbox.Init()
-	if err != nil {
-		fmt.Println("Error initializing termbox:", err)
-		os.Exit(1)
-	}
 
 	p := tea.NewProgram(model, tea.WithAltScreen())
 

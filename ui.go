@@ -2,19 +2,27 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/nsf/termbox-go"
+	"golang.org/x/term"
 )
 
 type tickMsg struct{ time.Time }
 
-func (m model) Init() tea.Cmd {
+func tick() tea.Cmd {
 	return tea.Tick(calcWordDuration(wpm), func(t time.Time) tea.Msg {
 		return tickMsg{t}
 	})
+}
+
+func (m model) Init() tea.Cmd {
+	return tea.Batch(
+		tick(),
+		tea.EnterAltScreen,
+	)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -57,16 +65,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		}
 
-		return m, tea.Tick(calcWordDuration(wpm), func(t time.Time) tea.Msg {
-			return tickMsg{t}
-		})
+		return m, tick()
 	}
 
 	return m, nil
 }
 
 func (m model) View() string {
-	w, h := termbox.Size()
+	w, h, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		fmt.Println("Failed to get terminal size:", err)
+		return ""
+	}
 
 	status := fmt.Sprint(wpm)
 
@@ -75,7 +85,7 @@ func (m model) View() string {
 	}
 
 	padding := "\n\n\n\n"
-	t := m.source + " - " + status + padding + m.words[m.cursor]
+	t := "\n" + m.source + " - " + status + padding + m.words[m.cursor]
 
 	text := lipgloss.NewStyle().
 		Width(w).
