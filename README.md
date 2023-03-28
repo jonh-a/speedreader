@@ -15,7 +15,7 @@ curl "https://raw.githubusercontent.com/jonh-a/speedreader/main/install.sh" | ba
 go build
 ```
 
-## Command Line Usage
+## Usage
 
 ### Input
 Speedreader supports **piped input** and **file paths**.
@@ -55,3 +55,13 @@ wpm: 250
 ```
 
 You can also adjust the words per minute with the use of the left and right arrow keys while the program is running.
+
+## Development
+
+### Triggering a new release
+Push a new release by tagging your commit and incrementing the version number as necessary.
+```
+$ git commit -m "commit message goes here"
+$ git tag v1.0.0
+$ git push --atomic origin main v1.0.0
+```
