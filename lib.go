@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 func isPiped() bool {
@@ -53,4 +55,28 @@ func wordEndsWithPunctuation(w string) bool {
 		}
 	}
 	return false
+}
+
+func findORP(word string) int {
+	if len(word) > 13 {
+		return 4
+	}
+	return []int{0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3}[len(word)]
+}
+
+func styleMiddleChar(w string, highlight bool) string {
+	orp := findORP(w)
+	firstChunk := w[:orp]
+	orpChar := string(w[orp])
+	secondChunk := w[orp+1:]
+
+	var styledORP string
+
+	if highlight {
+		styledORP = lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render(orpChar)
+	} else {
+		styledORP = orpChar
+	}
+
+	return firstChunk + styledORP + secondChunk
 }

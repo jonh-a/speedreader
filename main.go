@@ -14,11 +14,13 @@ func main() {
 	wpmFlag := flag.Int("w", 0, "words per minute (default 200)")
 	filepathFlag := flag.String("f", "", "read path/to/file")
 	pausedFlag := flag.Bool("p", false, "start paused")
+	highlightFlag := flag.Bool("o", false, "highlight ORP")
 	flag.Parse()
 
 	wpmArg := *wpmFlag
 	filepath := *filepathFlag
 	paused := *pausedFlag
+	highlight := *highlightFlag
 	input := ""
 	source := ""
 
@@ -45,7 +47,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	model := createModel(input, source, paused)
+	model := createModel(input, source, paused, highlight)
 
 	p := tea.NewProgram(model, tea.WithAltScreen())
 
@@ -60,15 +62,17 @@ type model struct {
 	cursor        int
 	paused        bool
 	source        string
+	highlight     bool
 	endOfSentence int
 }
 
-func createModel(inp string, source string, paused bool) model {
+func createModel(inp string, source string, paused bool, highlight bool) model {
 	return model{
 		words:         splitInput(inp),
 		cursor:        0,
 		paused:        paused,
 		source:        source,
+		highlight:     highlight,
 		endOfSentence: 0,
 	}
 }
