@@ -68,11 +68,13 @@ func styleMiddleChar(w string, highlight bool) string {
 	if len(w) == 0 {
 		return ""
 	}
+
 	if len(w) == 1 {
+		padding := 6
 		if highlight {
-			return lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render(w)
+			return strings.Repeat(" ", padding) + lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render(w) + strings.Repeat(" ", padding)
 		}
-		return w
+		return strings.Repeat(" ", padding) + w + strings.Repeat(" ", padding)
 	}
 
 	orp := findORP(w)
