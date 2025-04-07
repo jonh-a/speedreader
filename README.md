@@ -56,6 +56,19 @@ wpm: 250
 
 You can also adjust the words per minute with the use of the left and right arrow keys while the program is running.
 
+### Optimal Recognition Points
+Speedreader can optionally highlight the optimal recognition point character. By default, this behavior is disabled, however you can easily enable it in the command line or `~/.speedreaderrc` file.
+
+**As an argument:**
+```
+echo "Hi, I don't have anything interesting to say" | speedreader -o
+```
+
+**In a ~/.speedreaderrc file:**
+```
+highlight_orp: true
+```
+
 ## Development
 
 ### Triggering a new release
