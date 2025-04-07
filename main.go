@@ -8,21 +8,28 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-var wpm = 200
+var wpm = DEFAULT_WPM
 
 func main() {
 	wpmFlag := flag.Int("w", 0, "words per minute (default 200)")
 	filepathFlag := flag.String("f", "", "read path/to/file")
 	pausedFlag := flag.Bool("p", false, "start paused")
-	highlightFlag := flag.Bool("o", false, "highlight ORP")
+	highlightORPFlag := flag.Bool("o", DEFAULT_HIGHLIGHT_ORP, "highlight ORP")
+	printVrsionFlag := flag.Bool("v", false, "print version")
 	flag.Parse()
 
 	wpmArg := *wpmFlag
 	filepath := *filepathFlag
 	paused := *pausedFlag
-	highlight := *highlightFlag
+	highlightORP := *highlightORPFlag
+	printVersion := *printVrsionFlag
 	input := ""
 	source := ""
+
+	if printVersion {
+		fmt.Println(VERSION)
+		os.Exit(0)
+	}
 
 	c := readConfig()
 
@@ -30,6 +37,12 @@ func main() {
 		wpm = wpmArg
 	} else {
 		wpm = c.Wpm
+	}
+
+	fmt.Print(wpm)
+
+	if !highlightORP {
+		highlightORP = c.HighlightORP
 	}
 
 	if isPiped() {
@@ -47,7 +60,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	model := createModel(input, source, paused, highlight)
+	model := createModel(input, source, paused, highlightORP)
 
 	p := tea.NewProgram(model, tea.WithAltScreen())
 
@@ -62,17 +75,17 @@ type model struct {
 	cursor        int
 	paused        bool
 	source        string
-	highlight     bool
+	highlightORP  bool
 	endOfSentence int
 }
 
-func createModel(inp string, source string, paused bool, highlight bool) model {
+func createModel(inp string, source string, paused bool, highlightORP bool) model {
 	return model{
 		words:         splitInput(inp),
 		cursor:        0,
 		paused:        paused,
 		source:        source,
-		highlight:     highlight,
+		highlightORP:  highlightORP,
 		endOfSentence: 0,
 	}
 }

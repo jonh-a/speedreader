@@ -84,7 +84,7 @@ func (m model) View() string {
 		status = "PAUSED"
 	}
 
-	styledWord := styleMiddleChar(m.words[m.cursor], m.highlight)
+	styledWord := styleMiddleChar(m.words[m.cursor], m.highlightORP)
 
 	wordWidth := 13
 	horizontalPos := (width - wordWidth) / 2

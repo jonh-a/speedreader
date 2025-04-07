@@ -10,7 +10,8 @@ import (
 )
 
 type Config struct {
-	Wpm int
+	Wpm          int  `yaml:"wpm"`
+	HighlightORP bool `yaml:"highlight_orp"`
 }
 
 func getConfigPath() string {
@@ -26,14 +27,14 @@ func readConfig() Config {
 	c := getConfigPath()
 	file, err := ioutil.ReadFile(c)
 	if err != nil {
-		return Config{Wpm: 200}
+		return Config{Wpm: DEFAULT_WPM, HighlightORP: DEFAULT_HIGHLIGHT_ORP}
 	}
 
 	config := Config{}
 
 	err = yaml.Unmarshal(file, &config)
 	if err != nil {
-		return Config{Wpm: 200}
+		return Config{Wpm: DEFAULT_WPM, HighlightORP: DEFAULT_HIGHLIGHT_ORP}
 	}
 
 	return config
