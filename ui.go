@@ -72,7 +72,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	width, height, err := term.GetSize(int(os.Stdout.Fd()))
+	width, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		fmt.Println("Failed to get terminal size:", err)
 		return ""
@@ -86,14 +86,18 @@ func (m model) View() string {
 
 	styledWord := styleMiddleChar(m.words[m.cursor], m.highlight)
 
-	padding := "\n\n\n\n"
-	t := "\n" + m.source + " - " + status + padding + styledWord
+	wordWidth := 13
+	horizontalPos := (width - wordWidth) / 2
 
-	text := lipgloss.NewStyle().
+	statusLine := lipgloss.NewStyle().
 		Width(width).
-		Height(height).
 		Align(lipgloss.Center).
-		Render(t)
+		Render("\n" + m.source + " - " + status)
 
-	return text
+	wordLine := lipgloss.NewStyle().
+		Width(width).
+		PaddingLeft(horizontalPos).
+		Render("\n\n\n\n" + styledWord)
+
+	return statusLine + wordLine
 }

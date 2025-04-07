@@ -65,18 +65,43 @@ func findORP(word string) int {
 }
 
 func styleMiddleChar(w string, highlight bool) string {
+	if len(w) == 0 {
+		return ""
+	}
+	if len(w) == 1 {
+		if highlight {
+			return lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render(w)
+		}
+		return w
+	}
+
 	orp := findORP(w)
 	firstChunk := w[:orp]
 	orpChar := string(w[orp])
 	secondChunk := w[orp+1:]
 
 	var styledORP string
-
 	if highlight {
 		styledORP = lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render(orpChar)
 	} else {
 		styledORP = orpChar
 	}
 
-	return firstChunk + styledORP + secondChunk
+	centerPos := 6
+	beforeORP := len(firstChunk)
+	afterORP := len(secondChunk)
+
+	leftPadding := centerPos - beforeORP
+	rightPadding := 13 - (centerPos + 1 + afterORP)
+
+	if leftPadding < 0 {
+		leftPadding = 0
+	}
+	if rightPadding < 0 {
+		rightPadding = 0
+	}
+
+	paddedWord := strings.Repeat(" ", leftPadding) + firstChunk + styledORP + secondChunk + strings.Repeat(" ", rightPadding)
+
+	return paddedWord
 }
