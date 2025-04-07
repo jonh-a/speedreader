@@ -35,8 +35,10 @@ func main() {
 
 	if wpmArg != 0 {
 		wpm = wpmArg
-	} else {
+	} else if c.Wpm != 0 {
 		wpm = c.Wpm
+	} else {
+		wpm = DEFAULT_WPM
 	}
 
 	fmt.Print(wpm)
